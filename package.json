@@ -1,0 +1,26 @@
+{
+  "name": "discord-saas",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "build": "pnpm --filter @discord-saas/shared build && pnpm --filter @discord-saas/database build && pnpm --filter @discord-saas/api build && pnpm --filter @discord-saas/bot build && pnpm --filter @discord-saas/worker build",
+    "dev": "concurrently -n api,bot,worker -c blue,green,yellow \"pnpm --filter @discord-saas/api dev\" \"pnpm --filter @discord-saas/bot dev\" \"pnpm --filter @discord-saas/worker dev\"",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "db:generate": "pnpm --filter @discord-saas/database generate",
+    "db:migrate": "pnpm --filter @discord-saas/database migrate",
+    "db:studio": "pnpm --filter @discord-saas/database studio"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^24.0.0",
+    "@prisma/client": "^6.0.0",
+    "concurrently": "^9.0.0",
+    "eslint": "^9.0.0",
+    "prisma": "^6.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.0.0"
+  }
+}

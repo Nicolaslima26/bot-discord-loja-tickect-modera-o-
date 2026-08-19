@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Module {
+  STORE
+  TICKETS
+  MODERATION
+}
+
+enum GuildRole {
+  OWNER
+  ADMIN
+  MODERATOR
+  SUPPORT
+  SELLER
+}
+
+model Guild {
+  id            String              @id // Discord guild snowflake
+  name          String
+  isConfigured  Boolean             @default(false)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  modules       GuildModule[]
+  memberships   GuildMembership[]
+  auditLogs     AuditLog[]
+
+  @@index([createdAt])
+}
+
+model GuildModule {
+  id        String   @id @default(cuid())
+  guildId   String
+  module    Module
+  enabled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  guild     Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+  // Unique per guild guarantees that authorization never falls back to global state.
+  @@unique([guildId, module])
+  @@index([guildId, enabled])
+}
+
+model GuildMembership {
+  id        String    @id @default(cuid())
+  guildId   String
+  userId    String    // Discord user snowflake
+  role      GuildRole
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  guild     Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+  @@unique([guildId, userId])
+  @@index([guildId, role])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  guildId   String
+  actorId   String?
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  guild     Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+  @@index([guildId, createdAt])
+}
