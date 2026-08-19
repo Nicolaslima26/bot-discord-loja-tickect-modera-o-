@@ -6,13 +6,14 @@
 
 ## Configuração
 
-Um Administrador executa `/tickets setup canal:#suporte cargo_suporte:@Equipe categoria:opcional`. A operação cria/atualiza a configuração, ativa `TICKETS` explicitamente e publica o painel no canal indicado.
+Um Administrador executa `/tickets setup canal:#suporte cargo_suporte:@Equipe categoria:opcional canal_logs:opcional`. A operação cria/atualiza a configuração, ativa `TICKETS` explicitamente e publica o painel no canal indicado.
 
 ## Regras
 
-- Um usuário possui no máximo um ticket aberto no MVP.
+- Um usuário possui no máximo um ticket aberto no MVP; um lock transacional PostgreSQL protege contra cliques simultâneos.
 - Permissões do canal negam visualização para `@everyone` e a concedem ao autor e ao cargo de suporte.
-- Fechamentos ficam registrados em `Ticket` e `AuditLog`; a geração de transcripts e remoção agendada do canal entrarão na próxima etapa.
+- Fechamentos bloqueiam mensagens e criação/envio em tópicos pelo autor. O Worker verifica tickets fechados a cada 10 segundos e, após 30 segundos, gera transcript HTML em `storage/transcripts/`, envia o arquivo ao canal de logs configurado e remove o canal.
+- `/tickets reabrir` cancela a remoção e libera novamente o canal enquanto os 30 segundos não tiverem passado.
 
 ## Extensão
 

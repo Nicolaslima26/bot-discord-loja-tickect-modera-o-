@@ -7,7 +7,9 @@
   "dependencies": {
     "@discord-saas/database": "workspace:*",
     "@discord-saas/shared": "workspace:*",
+    "bullmq": "^5.0.0",
     "discord.js": "^14.0.0",
+    "ioredis": "^5.0.0",
     "zod": "^3.0.0"
   },
   "devDependencies": { "tsx": "^4.0.0", "typescript": "^5.0.0" }

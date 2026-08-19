@@ -37,6 +37,7 @@ model Guild {
   auditLogs     AuditLog[]
   ticketConfig  TicketConfig?
   tickets       Ticket[]
+  transcripts   TicketTranscript[]
 
   @@index([createdAt])
 }
@@ -46,6 +47,7 @@ model TicketConfig {
   panelChannelId   String
   supportRoleId    String
   categoryId       String?
+  logChannelId     String?
   maxOpenPerUser   Int      @default(1)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -61,14 +63,28 @@ model Ticket {
   status      TicketStatus @default(OPEN)
   closedAt    DateTime?
   closedById  String?
+  channelDeletedAt DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   guild       Guild        @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  transcript  TicketTranscript?
 
   // A ticket sequence is meaningful only inside a tenant.
   @@unique([guildId, sequence])
   @@index([guildId, openerId, status])
   @@index([guildId, status, createdAt])
+}
+
+model TicketTranscript {
+  id         String   @id @default(cuid())
+  guildId    String
+  ticketId   String   @unique
+  storageKey String   @unique
+  createdAt  DateTime @default(now())
+  guild      Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([guildId, createdAt])
 }
 
 model GuildModule {

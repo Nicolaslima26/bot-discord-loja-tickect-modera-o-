@@ -69,9 +69,15 @@ importers:
       '@discord-saas/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      bullmq:
+        specifier: ^5.0.0
+        version: 5.81.3(supports-color@8.1.1)
       discord.js:
         specifier: ^14.0.0
         version: 14.27.0
+      ioredis:
+        specifier: ^5.0.0
+        version: 5.11.1(supports-color@8.1.1)
       zod:
         specifier: ^3.0.0
         version: 3.25.76
@@ -85,12 +91,18 @@ importers:
 
   apps/worker:
     dependencies:
+      '@discord-saas/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@discord-saas/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       bullmq:
         specifier: ^5.0.0
         version: 5.81.3(supports-color@8.1.1)
+      discord.js:
+        specifier: ^14.0.0
+        version: 14.27.0
       ioredis:
         specifier: ^5.0.0
         version: 5.11.1(supports-color@8.1.1)

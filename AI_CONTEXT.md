@@ -2,7 +2,7 @@
 
 ## Objetivo e estado
 
-SaaS comercial multi-tenant para Discord. Cada `guildId` é um tenant; isolamento é a regra prioritária. A Fase 2 iniciou o MVP de Tickets: painel, canais privados e fechamento registrado. Transcripts e remoção assíncrona de canal ainda são pendências.
+SaaS comercial multi-tenant para Discord. Cada `guildId` é um tenant; isolamento é a regra prioritária. A Fase 2 possui Tickets com painel, canais privados, fechamento/reabertura, exclusão assíncrona, transcripts locais e logs opcionais.
 
 ## Estrutura
 
@@ -23,6 +23,8 @@ SaaS comercial multi-tenant para Discord. Cada `guildId` é um tenant; isolament
 5. Ao implementar: código, testes, docs, changelog e este contexto.
 
 O `/setup` usa `interaction.guildId` como a identidade confiável do tenant e não faz uma busca REST de guild durante a inicialização; falhas nessa busca não podem impedir o setup.
+
+Fechar ticket agenda `delete-ticket-channel` no BullMQ. Portanto o Worker deve estar executando para gerar o HTML em `storage/transcripts/`, enviar o arquivo ao canal de logs e remover o canal. Não substitua esta job por `setTimeout`, pois jobs precisam sobreviver a reinicializações.
 
 ## Execução
 

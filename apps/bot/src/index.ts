@@ -7,7 +7,7 @@ import { handleTicketButton, handleTicketsCommand } from "./tickets.js";
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, (readyClient) => {
-  console.log(`Bot connected as ${readyClient.user.tag}`);
+  console.log(`Bot connected as ${readyClient.user.tag} (ticket queue enabled)`);
 });
 
 client.on(Events.Error, (error) => {

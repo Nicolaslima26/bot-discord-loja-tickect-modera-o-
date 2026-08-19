@@ -15,3 +15,11 @@
 - Scripts do Bot, API e worker agora carregam o `.env` raiz como os scripts Prisma.
 - `/setup` não depende mais do cache local de guilds e usa a flag moderna para respostas efêmeras.
 - `/setup` não faz mais uma busca REST de guild desnecessária, evitando falhas `Unknown Guild`.
+
+### Changed
+
+- Tickets agora geram transcripts locais, enviam logs opcionais, removem canais por job persistente e permitem reabertura antes da remoção.
+
+### Fixed
+
+- Fechamento de ticket agora usa um ID de job BullMQ válido e confirma a interação antes das operações assíncronas.

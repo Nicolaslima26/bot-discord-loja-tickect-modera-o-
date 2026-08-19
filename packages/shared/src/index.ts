@@ -14,5 +14,5 @@ export const moduleLabels: Record<Module, string> = {
 export const moduleUnavailableMessage =
   "Este módulo não está habilitado no seu plano ou servidor.";
 
-export type AppJobName = "health-check";
+export type AppJobName = "health-check" | "delete-ticket-channel" | "ticket-cleanup";
 export const APP_QUEUE = "discord-saas";
