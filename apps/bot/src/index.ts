@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits, MessageFlags, PermissionFlagsBits } 
 import { Prisma, prisma } from "@discord-saas/database";
 import { Module } from "@discord-saas/shared";
 import { env } from "./env.js";
+import { handleTicketButton, handleTicketsCommand } from "./tickets.js";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -15,9 +16,17 @@ client.on(Events.Error, (error) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isButton()) {
+    if (interaction.customId.startsWith("tickets:")) await handleTicketButton(interaction);
+    return;
+  }
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName === "ping") {
     await interaction.reply({ content: `Pong! Gateway: ${client.ws.ping}ms`, flags: MessageFlags.Ephemeral });
+    return;
+  }
+  if (interaction.commandName === "tickets") {
+    await handleTicketsCommand(interaction);
     return;
   }
   if (interaction.commandName !== "setup") return;

@@ -2,7 +2,7 @@
 
 ## Objetivo e estado
 
-SaaS comercial multi-tenant para Discord. Cada `guildId` é um tenant; isolamento é a regra prioritária. A Fase 1 está pronta. Próxima fase: Tickets, mantendo documentação, testes e este arquivo atualizados.
+SaaS comercial multi-tenant para Discord. Cada `guildId` é um tenant; isolamento é a regra prioritária. A Fase 2 iniciou o MVP de Tickets: painel, canais privados e fechamento registrado. Transcripts e remoção assíncrona de canal ainda são pendências.
 
 ## Estrutura
 

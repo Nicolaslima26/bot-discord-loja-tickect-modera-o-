@@ -21,6 +21,11 @@ enum GuildRole {
   SELLER
 }
 
+enum TicketStatus {
+  OPEN
+  CLOSED
+}
+
 model Guild {
   id            String              @id // Discord guild snowflake
   name          String
@@ -30,8 +35,40 @@ model Guild {
   modules       GuildModule[]
   memberships   GuildMembership[]
   auditLogs     AuditLog[]
+  ticketConfig  TicketConfig?
+  tickets       Ticket[]
 
   @@index([createdAt])
+}
+
+model TicketConfig {
+  guildId          String   @id
+  panelChannelId   String
+  supportRoleId    String
+  categoryId       String?
+  maxOpenPerUser   Int      @default(1)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  guild            Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  guildId     String
+  channelId   String       @unique
+  openerId    String
+  sequence    Int
+  status      TicketStatus @default(OPEN)
+  closedAt    DateTime?
+  closedById  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  guild       Guild        @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+  // A ticket sequence is meaningful only inside a tenant.
+  @@unique([guildId, sequence])
+  @@index([guildId, openerId, status])
+  @@index([guildId, status, createdAt])
 }
 
 model GuildModule {
